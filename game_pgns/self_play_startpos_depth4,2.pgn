@@ -1,0 +1,11 @@
+[Event "Self-play"]
+[Site "?"]
+[Date "2024-02-14"]
+[Round "?"]
+[White "PuffinChess"]
+[Black "PuffinChess"]
+[Result "1-0"]
+[White-Elo "Unknown"]
+[Black-Elo "Unknown"]
+
+1. c3 Nf6 2. Nf3 d5 3. h3 Bxh3 4. Rxh3 Nc6 5. Rg3 Nd4 6. cxd4 e5 7. dxe5 Bd6 8. Rxg7 Bxe5 9. Nxe5 Rf8 10. d3 Ne4 11. Rxh7 Nxf2 12. Kxf2 Rc8 13. Bh6 c6 14. d4 Qg5 15. Bxg5 Rd8 16. Nc3 a5 17. a4 c5 18. Nb5 cxd4 19. Nc7# 1-0
