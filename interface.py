@@ -11,9 +11,14 @@ from typing import Dict, List, Tuple
 
 def get_resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
     return os.path.join(base_path, relative_path)
-    
+
 
 engine_script = get_resource_path('engine.py')
 
@@ -52,12 +57,12 @@ async def set_debug(token: str, output_queue):
     global debug
     match token:
         case "on":
-             debug = True
-             await output_queue.put("Started new debug session")
+            debug = True
+            await output_queue.put("Started new debug session")
         case "off":
-             debug = False
+            debug = False
         case _:
-             await output_queue.put(f"Undefined option for debug: {token}")
+            await output_queue.put(f"Undefined option for debug: {token}")
 
 
 async def setoption(tokens: list[str], output_queue):
@@ -69,7 +74,6 @@ def ucinewgame():
 
 
 def position(tokens: list[str]):
-    #bude treba vyriesit ucinewgame?
     if tokens[0] == "fen":
         internal_fen = " ".join(tokens[1:7])
     else:
@@ -88,8 +92,8 @@ def position(tokens: list[str]):
 
 
 async def go(tokens: list[str], 
-       fen: str,
-      ) -> asyncio.subprocess.Process:
+             fen: str,
+            ) -> asyncio.subprocess.Process:
     # we won't support ponder and mate
     # and we won't even count nodes
     global debug
@@ -230,8 +234,8 @@ async def main():
                     case "go":
                         if fen is not None:
                             engine = await go(tokens[1:], fen)
-                            asyncio.create_task(engine_handler(engine, output_queue))
-                            asyncio.create_task(engine_error_handler(engine, output_queue))
+                            await asyncio.create_task(engine_handler(engine, output_queue))
+                            await asyncio.create_task(engine_error_handler(engine, output_queue))
                         else:
                             await output_queue.put("No position specified")
                             
